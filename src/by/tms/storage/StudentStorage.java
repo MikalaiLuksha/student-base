@@ -88,7 +88,7 @@ public class StudentStorage {
         return true;
     }
 
-    public boolean updateGroupaById (long id , String groupa) {
+    public boolean updateGroupById (long id , String groupa) {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "1987Roll");
