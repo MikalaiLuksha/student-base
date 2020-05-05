@@ -5,10 +5,6 @@ import by.tms.domain.Student;
 import java.sql.*;
 
 public class StudentStorage {
-	public static void main(String[] args) {
-		StudentStorage studentStorage = new StudentStorage();
-        System.out.println(studentStorage.returnIdByLogin("Log2"));
-    }
 
 	public Student updateStudentById (long id , Student student) {
 		Connection connection = null;
