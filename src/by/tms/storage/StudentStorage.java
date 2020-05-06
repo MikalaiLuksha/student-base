@@ -6,7 +6,50 @@ import java.sql.*;
 
 public class StudentStorage {
 
-	public Student updateStudentById (long id , Student student) {
+//    public static void main(String[] args) {
+//        StudentStorage studentStorage = new StudentStorage();
+//        Student student1 = studentStorage.getStudentById(1);
+//        System.out.println(student1);
+//        Student student2 = studentStorage.updateStudent(student1, new Student (0, "Ira", "bbbb", "wert", "1w", "1r"));
+//        System.out.println(student2);
+//    }
+
+    public Student updateStudentByStudent (Student studentBefore , Student studentAfter) {
+        Connection connection = null;
+        String login = null;
+        String password = null;
+        String name = null;
+        String faculty = null;
+        String group = null;
+        long id = 0;
+        try {
+            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "1987Roll");
+            PreparedStatement preparedStatement = connection.prepareStatement("update studentbase set login = ?, password = ?, name = ?, faculty = ?, groupa = ? where id = ?");
+            preparedStatement.setString(1, studentAfter.getLogin());
+            preparedStatement.setString(2, studentAfter.getPassword());
+            preparedStatement.setString(3, studentAfter.getPassword());
+            preparedStatement.setString(4, studentAfter.getFaculty());
+            preparedStatement.setString(5, studentAfter.getGroup());
+            preparedStatement.setLong(6, studentBefore.getId());
+            preparedStatement.executeUpdate();
+            PreparedStatement preparedStatement1 = connection.prepareStatement("select * from studentbase u where u.id = ?");
+            preparedStatement1.setLong(1, studentBefore.getId());
+            ResultSet resultSet = preparedStatement1.executeQuery();
+            resultSet.next();
+            id = resultSet.getLong(1);
+            login = resultSet.getString(2);
+            password = resultSet.getString(3);
+            name = resultSet.getString(4);
+            faculty = resultSet.getString(5);
+            group = resultSet.getString(6);
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return new Student(id, login, password, name, faculty, group);
+    }
+
+ 	public Student updateStudentById (long id , Student student) {
 		Connection connection = null;
 		String login = null;
 		String password = null;
@@ -27,16 +70,16 @@ public class StudentStorage {
 			preparedStatement1.setLong(1, id);
 			ResultSet resultSet = preparedStatement1.executeQuery();
 			resultSet.next();
-			login = resultSet.getString(1);
-			password = resultSet.getString(2);
-			name = resultSet.getString(3);
-			faculty = resultSet.getString(4);
-			group = resultSet.getString(5);
+			login = resultSet.getString(2);
+			password = resultSet.getString(3);
+			name = resultSet.getString(4);
+			faculty = resultSet.getString(5);
+			group = resultSet.getString(6);
 			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return new Student(login, password, name, faculty, group);
+		return new Student(id, login, password, name, faculty, group);
 	}
 
 	public boolean updatePasswordById (long id , String password) {
@@ -116,6 +159,39 @@ public class StudentStorage {
             return id;
         }
 
+//    public Student updateStudent ( Student student) {
+//        Connection connection = null;
+//        String login = null;
+//        String password = null;
+//        String name = null;
+//        String faculty = null;
+//        String group = null;
+//        try {
+//            connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "1987Roll");
+//            PreparedStatement preparedStatement = connection.prepareStatement("update studentbase set login = ?, password = ?, name = ?, faculty = ?, groupa = ? where id = ?");
+//            preparedStatement.setString(1, student.getLogin());
+//            preparedStatement.setString(2, student.getPassword());
+//            preparedStatement.setString(3, student.getPassword());
+//            preparedStatement.setString(4, student.getFaculty());
+//            preparedStatement.setString(5, student.getGroup());
+//            preparedStatement.setLong(6, student.getId());
+//            preparedStatement.executeUpdate();
+//            PreparedStatement preparedStatement1 = connection.prepareStatement("select * from studentbase u where u.id = ?");
+//            preparedStatement1.setLong(1, student.getId());
+//            ResultSet resultSet = preparedStatement1.executeQuery();
+//            resultSet.next();
+//            login = resultSet.getString(1);
+//            password = resultSet.getString(2);
+//            name = resultSet.getString(3);
+//            faculty = resultSet.getString(4);
+//            group = resultSet.getString(5);
+//            connection.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return new Student(login, password, name, faculty, group);
+//    }
+
 
     //	public boolean saveStudent (Student student){
 //					try {
@@ -156,7 +232,7 @@ public class StudentStorage {
 //			} catch(SQLException e){
 //				e.printStackTrace();
 //			}
-//			return new Student(login , password , name , faculty , group);
+//			return new Student(id, login , password , name , faculty , group);
 //		}
 
 //	public void removeStudentById ( int id) {
